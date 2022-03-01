@@ -46,7 +46,16 @@ type Bubble struct {
 }
 
 func New(width, height int) *Bubble {
-	termWidth, termHeight := width, height
+	b := &Bubble{
+		frame:     0,
+		startTime: time.Now(),
+	}
+	b.setSize(width, height)
+	return b
+}
+
+func (b *Bubble) setSize(w, h int) {
+	termWidth, termHeight := w, h
 	// Calculate the width in terms of the output char
 	termWidth = termWidth / len(outputChar)
 	minRow := 0
@@ -57,33 +66,27 @@ func New(width, height int) *Bubble {
 		minRow = (maxRow - termHeight) / 2
 		maxRow = minRow + termHeight
 	}
+	maxRow -= 1
 	if maxCol > termWidth {
 		minCol = (maxCol - termWidth) / 2
 		maxCol = minCol + termWidth
 	}
 	// Calculate the final animation width
 	animWidth := (maxCol - minCol) * len(outputChar)
-	b := &Bubble{
-		frame:     0,
-		width:     width,
-		height:    height,
-		minRow:    minRow,
-		maxRow:    maxRow,
-		minCol:    minCol,
-		maxCol:    maxCol,
-		animWidth: animWidth,
-		startTime: time.Now(),
-	}
-	return b
+	b.width = w
+	b.height = h
+	b.minRow = minRow
+	b.maxRow = maxRow
+	b.minCol = minCol
+	b.maxCol = maxCol
+	b.animWidth = animWidth
 }
 
 func (b *Bubble) Init() tea.Cmd {
-	fmt.Print("\033[H\033[2J\033[?25l")
 	return tick
 }
 
 func (b *Bubble) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	var cmds []tea.Cmd
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
@@ -91,8 +94,7 @@ func (b *Bubble) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return b, tea.Quit
 		}
 	case tea.WindowSizeMsg:
-		b.width = msg.Width
-		b.height = msg.Height
+		b.setSize(msg.Width, msg.Height)
 	case tickMsg:
 		b.frame++
 		if b.frame >= len(frames) {
@@ -100,7 +102,7 @@ func (b *Bubble) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 		return b, tick
 	}
-	return b, tea.Batch(cmds...)
+	return b, nil
 }
 
 func tick() tea.Msg {
@@ -131,6 +133,6 @@ func (b *Bubble) viewTime() string {
 	pr(strings.Repeat(" ", padding))
 	pr(message)
 	pr(strings.Repeat(" ", padding+4))
-	fmt.Fprintln(&s, "\033[0m")
+	fmt.Fprint(&s, "\033[0m")
 	return s.String()
 }
