@@ -24,7 +24,6 @@ nyancat
 This is based on a couple of [Charm](https://github.com/charmbracelet)'s packages:
 
 - [bubbletea](https://github.com/charmbracelet/bubbletea): TUI framework
-- [bubbles](https://github.com/charmbracelet/bubbles): TUI components
 - [lipgloss](https://github.com/charmbracelet/lipgloss): Styling
 - [wish](https://github.com/charmbracelet/wish): SSH apps
 
