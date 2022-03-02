@@ -51,6 +51,8 @@ changelog:
 
 release:
   footer: |
-    {{- if .repository }}
-    **Full Changelog**: {{ .repository }}/compare/{{ .PreviousTag }}...{{ .Tag }}
+    {{- if .PreviousTag }}
+    **Full Changelog**: https://github.com/aymanbagabas/{{ .ProjectName }}/compare/{{ .PreviousTag }}...{{ .Tag }}
+    {{- else }}
+    **Full Changelog**: https://github.com/aymanbagabas/{{ .ProjectName }}/commits/{{ .Tag }}
     {{- end }}
