@@ -2,6 +2,11 @@
 
 Nyancat over SSH!
 
+`ssh dir.charm.sh -p2226`
+
+![NyancatSH GIF](nyancatsh.gif)
+
+
 ## Installation
 
 ```sh
