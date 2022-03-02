@@ -6,7 +6,10 @@ gomod:
   proxy: true
 
 builds:
-- env:
+- id: nyancatsh
+  main: "."
+  binary: nyancatsh
+  env:
   - CGO_ENABLED=0
   goos:
   - linux
@@ -20,6 +23,33 @@ builds:
     - -trimpath
   ldflags:
     - -s -w -X main.version={{ .Version }} -X main.commit={{ .Commit }} -X main.date={{ .CommitDate }}
+- id: nyancat
+  main: "./cmd/nyancat"
+  binary: nyancat
+  env:
+  - CGO_ENABLED=0
+  goos:
+  - linux
+  - darwin
+  - windows
+  goarch:
+  - amd64
+  - arm64
+  mod_timestamp: '{{ .CommitTimestamp }}'
+  flags:
+    - -trimpath
+  ldflags:
+    - -s -w -X main.version={{ .Version }} -X main.commit={{ .Commit }} -X main.date={{ .CommitDate }}
+
+archives:
+  - id: nyancatsh
+    builds:
+      - nyancatsh
+    name_template: "{{ .Binary }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+  - id: nyancat
+    builds:
+      - nyancat
+    name_template: "{{ .Binary }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
 
 universal_binaries:
 - replace: true
