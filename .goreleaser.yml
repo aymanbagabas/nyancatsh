@@ -52,7 +52,10 @@ archives:
     name_template: "{{ .Binary }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
 
 universal_binaries:
-- replace: true
+- id: nyancatsh
+  replace: true
+- id: nyancat
+  replace: true
 
 snapshot:
   name_template: '{{ incpatch .Version }}-next'
