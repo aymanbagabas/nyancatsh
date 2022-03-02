@@ -6,6 +6,7 @@ import (
 	"time"
 
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/lipgloss"
 )
 
 type tickMsg struct{}
@@ -66,7 +67,10 @@ func (b *Bubble) setSize(w, h int) {
 		minRow = (maxRow - termHeight) / 2
 		maxRow = minRow + termHeight
 	}
-	maxRow -= 1
+	if maxRow > 0 {
+		// account for timer text line
+		maxRow -= 1
+	}
 	if maxCol > termWidth {
 		minCol = (maxCol - termWidth) / 2
 		maxCol = minCol + termWidth
@@ -115,24 +119,22 @@ func (b *Bubble) View() string {
 	frame := frames[b.frame]
 	for _, line := range frame[b.minRow:b.maxRow] {
 		for _, char := range line[b.minCol:b.maxCol] {
-			fmt.Fprintf(&s, "\033[48;5;%sm%s", colors[string(char)], outputChar)
+			style := lipgloss.NewStyle().Background(lipgloss.Color(colors[string(char)]))
+			s.WriteString(style.Render(outputChar))
 		}
-		fmt.Fprintln(&s, "\033[0m")
+		s.WriteString("\n")
 	}
 	s.WriteString(b.viewTime())
-	fmt.Fprint(&s, "\033[H")
 	return s.String()
 }
 
 func (b *Bubble) viewTime() string {
-	var s strings.Builder
-	pr := func(m string) { fmt.Fprintf(&s, "\033[1;37;48;5;17m%s", m) }
+	style := lipgloss.NewStyle().
+		Background(lipgloss.Color(colors[","])).
+		Foreground(lipgloss.Color(colors["."])).
+		Bold(true).
+		Width(b.animWidth).
+		Align(lipgloss.Center)
 	message := fmt.Sprintf("You have nyaned for %.f seconds!", time.Since(b.startTime).Seconds())
-	padding := (b.animWidth - (len(message) + 4)) / 2
-
-	pr(strings.Repeat(" ", padding))
-	pr(message)
-	pr(strings.Repeat(" ", padding+4))
-	fmt.Fprint(&s, "\033[0m")
-	return s.String()
+	return style.Render(message)
 }
