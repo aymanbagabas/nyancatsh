@@ -24,7 +24,7 @@ func main() {
 	}
 	b := bubble.New(w, h)
 	p := tea.NewProgram(b, tea.WithAltScreen())
-	if err = p.Start(); err != nil {
+	if _, err = p.Run(); err != nil {
 		log.Fatal(err)
 	}
 }
