@@ -1,3 +1,5 @@
+version: 2
+
 before:
   hooks:
     - go mod tidy
@@ -6,40 +8,40 @@ gomod:
   proxy: true
 
 builds:
-- id: nyancatsh
-  main: "."
-  binary: nyancatsh
-  env:
-  - CGO_ENABLED=0
-  goos:
-  - linux
-  - darwin
-  - windows
-  goarch:
-  - amd64
-  - arm64
-  mod_timestamp: '{{ .CommitTimestamp }}'
-  flags:
-    - -trimpath
-  ldflags:
-    - -s -w -X main.version={{ .Version }} -X main.commit={{ .Commit }} -X main.date={{ .CommitDate }}
-- id: nyancat
-  main: "./cmd/nyancat"
-  binary: nyancat
-  env:
-  - CGO_ENABLED=0
-  goos:
-  - linux
-  - darwin
-  - windows
-  goarch:
-  - amd64
-  - arm64
-  mod_timestamp: '{{ .CommitTimestamp }}'
-  flags:
-    - -trimpath
-  ldflags:
-    - -s -w -X main.version={{ .Version }} -X main.commit={{ .Commit }} -X main.date={{ .CommitDate }}
+  - id: nyancatsh
+    main: "."
+    binary: nyancatsh
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    mod_timestamp: "{{ .CommitTimestamp }}"
+    flags:
+      - -trimpath
+    ldflags:
+      - -s -w -X main.version={{ .Version }} -X main.commit={{ .Commit }} -X main.date={{ .CommitDate }}
+  - id: nyancat
+    main: "./cmd/nyancat"
+    binary: nyancat
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    mod_timestamp: "{{ .CommitTimestamp }}"
+    flags:
+      - -trimpath
+    ldflags:
+      - -s -w -X main.version={{ .Version }} -X main.commit={{ .Commit }} -X main.date={{ .CommitDate }}
 
 archives:
   - id: nyancatsh
@@ -52,31 +54,28 @@ archives:
     name_template: "{{ .Binary }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
 
 universal_binaries:
-- id: nyancatsh
-  replace: true
-- id: nyancat
-  replace: true
-
-snapshot:
-  name_template: '{{ incpatch .Version }}-next'
+  - id: nyancatsh
+    replace: true
+  - id: nyancat
+    replace: true
 
 changelog:
   sort: asc
   use: github
   filters:
     exclude:
-    - '^docs:'
-    - '^test:'
-    - '^chore'
-    - Merge pull request
-    - Merge remote-tracking branch
-    - Merge branch
-    - go mod tidy
+      - "^docs:"
+      - "^test:"
+      - "^chore"
+      - Merge pull request
+      - Merge remote-tracking branch
+      - Merge branch
+      - go mod tidy
   groups:
-    - title: 'New Features'
+    - title: "New Features"
       regexp: "^.*feat[(\\w)]*:+.*$"
       order: 0
-    - title: 'Bug fixes'
+    - title: "Bug fixes"
       regexp: "^.*fix[(\\w)]*:+.*$"
       order: 10
     - title: Other work
@@ -89,3 +88,4 @@ release:
     {{- else }}
     **Full Changelog**: https://github.com/aymanbagabas/{{ .ProjectName }}/commits/{{ .Tag }}
     {{- end }}
+
