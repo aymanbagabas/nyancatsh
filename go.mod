@@ -9,7 +9,7 @@ require (
 )
 
 require (
-	github.com/charmbracelet/bubbletea v1.2.4
+	github.com/charmbracelet/bubbletea v1.3.0
 	github.com/charmbracelet/ssh v0.0.0-20250128164007-98fd5ae11894
 )
 
