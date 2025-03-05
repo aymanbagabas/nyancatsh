@@ -5,7 +5,7 @@ go 1.17
 require (
 	github.com/charmbracelet/lipgloss v1.0.0
 	github.com/charmbracelet/wish v1.4.6
-	golang.org/x/term v0.29.0
+	golang.org/x/term v0.30.0
 )
 
 require (
@@ -40,6 +40,6 @@ require (
 	golang.org/x/crypto v0.32.0 // indirect
 	golang.org/x/exp v0.0.0-20240719175910-8a7402abbf56 // indirect
 	golang.org/x/sync v0.11.0 // indirect
-	golang.org/x/sys v0.30.0 // indirect
+	golang.org/x/sys v0.31.0 // indirect
 	golang.org/x/text v0.21.0 // indirect
 )
